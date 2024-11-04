@@ -28,14 +28,25 @@ const Statistics = (props) => {
   return (
     <div>
       <div>
-        good {props.counter[0]}
+        good {props.valuesNumbers[0]}
       </div>
       <div>
-        neutral {props.counter[1]}
+        neutral {props.valuesNumbers[1]}
       </div>
       <div>
-        bad {props.counter[2]}
+        bad {props.valuesNumbers[2]}
       </div>
+
+      <div>
+        {props.allNumber}
+      </div>
+      <div>
+        {props.averageNumber}
+      </div>
+      <div>
+        {props.positiveNumber}%
+      </div>
+
     </div>
 
   )
@@ -50,6 +61,12 @@ const App = () => {
   const [bad_value, setBad] = useState(0)
   
   const values = [good_value, neutral_value, bad_value]
+
+  let all = good_value+neutral_value+bad_value
+  let average = 1*good_value + 0*neutral_value + -1*bad_value
+  let positive = (good_value / all) * 100
+
+  const StatisticsProps = {allNumber:all, averageNumber:average, positiveNumber:positive ,valuesNumbers:values}
 
   return (
     <div>
@@ -67,7 +84,7 @@ const App = () => {
         </div>
 
         <StatisticsTitle/>
-        <Statistics counter={values}/>
+        <Statistics {...StatisticsProps}/>
     </div>
   )
 }
