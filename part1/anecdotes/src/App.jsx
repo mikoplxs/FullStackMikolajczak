@@ -17,6 +17,11 @@ const App = () => {
   return (
     <div>
       {anecdotes[selected]}
+      <div>
+        <button onClick={() => setSelected(Math.floor(Math.random() * (anecdotes.length + 1)))}>
+          next anecdote
+        </button>
+      </div>
     </div>
   )
 }
