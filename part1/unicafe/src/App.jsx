@@ -13,6 +13,14 @@ const Title = () => {
 
 }
 
+const Button = (props) => {
+  return (
+    <button onClick={props.onClick}>{props.text}</button>
+  )
+
+
+}
+
 const StatisticsTitle = () => {
   const title_text = "statistics"
 
@@ -35,31 +43,29 @@ const Statistics = (props) => {
 
   return (
     <div>
-      <div>
-        good {props.valuesNumbers[0]}
-      </div>
-      <div>
-        neutral {props.valuesNumbers[1]}
-      </div>
-      <div>
-        bad {props.valuesNumbers[2]}
-      </div>
+      <StatisticsLine text="good" value={props.valuesNumbers[0]}/>
+      <StatisticsLine text="neutral" value={props.valuesNumbers[1]}/>
+      <StatisticsLine text="bad" value={props.valuesNumbers[2]}/>
 
-      <div>
-        {props.allNumber}
-      </div>
-      <div>
-        {props.averageNumber}
-      </div>
-      <div>
-        {props.positiveNumber}%
-      </div>
+      <StatisticsLine text="all" value={props.allNumber}/>
+      <StatisticsLine text="average" value={props.averageNumber}/>
+      <StatisticsLine text="positive" value={props.positiveNumber}/>
 
     </div>
 
   )
 
 }
+
+const StatisticsLine = (props) => {
+
+  return (
+    <div>
+      {props.text} {props.value}
+    </div>
+  )
+
+} 
 
 const App = () => {
   // save clicks of each button to its own state
@@ -73,24 +79,16 @@ const App = () => {
   let all = good_value+neutral_value+bad_value
   let average = 1*good_value + 0*neutral_value + -1*bad_value
   let positive = (good_value / all) * 100
+  let positive_percentage = positive+"%"
 
-  const StatisticsProps = {allNumber:all, averageNumber:average, positiveNumber:positive ,valuesNumbers:values}
+  const StatisticsProps = {allNumber:all, averageNumber:average, positiveNumber:positive_percentage ,valuesNumbers:values}
 
   return (
     <div>
         <Title/>
-        <div>
-          <button onClick={() => setGood(good_value + 1)}>
-            good
-          </button>
-          <button onClick={() => setNeutral(neutral_value + 1)}>
-            neutral
-          </button>
-          <button onClick={() => setBad(bad_value + 1)}>
-            bad
-          </button>
-        </div>
-
+        <Button text="good" onClick={() => setGood(good_value + 1)}/>
+        <Button text="neutral" onClick={() => setNeutral(neutral_value + 1)}/>
+        <Button text="bad" onClick={() => setBad(bad_value + 1)}/>
         <StatisticsTitle/>
         <Statistics {...StatisticsProps}/>
     </div>
