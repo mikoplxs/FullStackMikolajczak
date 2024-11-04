@@ -25,6 +25,14 @@ const StatisticsTitle = () => {
 
 const Statistics = (props) => {
 
+  if (props.valuesNumbers[0] == 0 && props.valuesNumbers[1] == 0 && props.valuesNumbers[2] == 0) {
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+  }
+
   return (
     <div>
       <div>
