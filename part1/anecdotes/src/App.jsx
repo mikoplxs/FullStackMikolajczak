@@ -1,5 +1,37 @@
 import { useState } from 'react'
 
+const Title = (props) => {
+  return (
+    <div>
+      <h2>Anecdote of the day</h2>
+      {props.anecdote}<br></br>
+      has {props.vote} votes
+    </div>
+
+
+  )
+}
+
+const Button = (props) => {  
+  return (
+    <button onClick={props.onclick}>{props.text}</button>
+
+  )
+
+}
+
+const MostVotes = (props) => {
+
+
+  return (
+    <div>
+          <h2>Anecdote with most votes</h2>
+          {props.anecdote}<br></br>
+          has {props.vote} votes
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -14,41 +46,30 @@ const App = () => {
 
 
   const [selected, setSelected] = useState(0)
-  const [anecdotes_votes, setValue] = useState([1,5,3,2,1,6,4,2])
-  const [anecdote_highest_text, setText] = useState(anecdotes[selected])
+  const [anecdotes_votes, setValue] = useState([0,0,0,0,0,0,0,0])
+  const [anecdote_highest_text, setText] = useState("...")
   const [anecdote_highest_vote, setVote] = useState(0)
 
-
   const voteClick = () => {
-    const votes_copy = {...anecdotes_votes}
+    const votes_copy = [...anecdotes_votes]
     votes_copy[selected] += 1
-    setValue(votes_copy)
+    const updated_votes = votes_copy
+  
+    setValue(updated_votes)
 
-    setVote(Math.max(...anecdotes_votes))
-
-
+    const max = Math.max(...updated_votes)
+    const index = updated_votes.indexOf(max)
+    setVote(max)
+    setText(anecdotes[index])
+    console.log(anecdotes_votes)
   }
   
-
   return (
     <div>
-      <h2>Anecdote of the day</h2>
-      {anecdotes[selected]}
-      <div>
-        has {anecdotes_votes[selected]} votes
-      </div>
-      <div>
-        <button onClick={() => setSelected(Math.floor(Math.random() * ((anecdotes.length - 1) + 1)))}>
-          next anecdote
-        </button>
-        <button onClick={() => voteClick()}>
-          vote
-        </button>
-
-      </div>
-      <h2>Anecdote with most votes</h2>
-      {anecdote_highest_text}
-      {anecdote_highest_vote}
+      <Title anecdote={anecdotes[selected]} vote={anecdotes_votes[selected]}/>
+      <Button text="next anecdote" onclick={() => setSelected(Math.floor(Math.random() * ((anecdotes.length - 1) + 1)))}/>
+      <Button text="vote" onclick={() => voteClick()}/>
+      <MostVotes anecdote={anecdote_highest_text} vote={anecdote_highest_vote}/>
     </div>
   )
 }
