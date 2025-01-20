@@ -23,7 +23,7 @@ const Course = (props) => {
     <div>
         <Header course={props.seal.name} />
         <Content course={props.seal.parts}/>
-
+        <Total course={props.seal.parts}/>
     </div>
   )
 }
@@ -36,15 +36,18 @@ const Header = (props) => {
   )
 }
 
-// const Total = (props) => {
-//   return (
-//     <div>
-//       Total: {props.total[0].exercises + props.total[1].exercises + props.total[2].exercises}
-//     </div>
+const Total = (props) => {
 
-//   )
+  const total = props.course.reduce((acc,item) => acc+item.exercises, 0,)
 
-// }
+  return (
+    <div>
+      Total: {total}
+    </div>
+
+  )
+
+}
 
 const App = () => {
   const course = {
