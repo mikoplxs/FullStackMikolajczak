@@ -6,13 +6,29 @@ const Part = (props) => {
   )
 }
 
+const Total = (props) => {
+
+  //const total = props.sealparts[0].exercises + props.sealparts[1].exercises + props.sealparts[2].exercises
+
+  const exercises_seal = props.sealparts.map(ex => ex.exercises)
+  const total = exercises_seal.reduce((s,p) => s+p) 
+
+
+  return (
+    <div>
+      total: {total}
+
+    </div>
+  )
+
+}
 
 const Content = (props) => {
   return (
     <div>
-      <Part part = {props.seal[0].name} ex = {props.seal[0].exercises} />
-      <Part part = {props.seal[1].name} ex = {props.seal[1].exercises} />
-      <Part part = {props.seal[2].name} ex = {props.seal[2].exercises} />
+      <Part part = {props.seal.parts[0].name} ex = {props.seal.parts[0].exercises} />
+      <Part part = {props.seal.parts[1].name} ex = {props.seal.parts[1].exercises} />
+      <Part part = {props.seal.parts[2].name} ex = {props.seal.parts[2].exercises} />
 
     </div>
   )
@@ -21,46 +37,46 @@ const Content = (props) => {
 const Header = (props) => {
   return (
     <div>
-      <h1>{props.course}</h1>
+      <h1>{props.text}</h1>
     </div>
   )
 }
 
-const Total = (props) => {
+const Course = (props) => {
   return (
     <div>
-      Total: {props.total[0].exercises + props.total[1].exercises + props.total[2].exercises}
+      <Header text={props.course.name}/>
+      <Content seal={props.course}/>
+      <Total sealparts={props.course.parts}/>
     </div>
 
   )
-
 }
 
 const App = () => {
-  const course = 'Half Stack application development'
+  const course = {
+    id: 1,
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10,
+        id: 1
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7,
+        id: 2
+      },
+      {
+        name: 'State of a component',
+        exercises: 14,
+        id: 3
+      }
+    ]
+  }
 
-  const parts = [
-    {
-      name:  'Fundamentals of React',
-      exercises: 10   
-    },
-    {
-      name:  'Using props to pass data',
-      exercises: 7   
-    },
-    {
-      name:  'State of a component',
-      exercises: 14   
-    }
-  ]  
-
-  return (
-    <div>
-      <Header course={course}/>
-      <Content seal = {parts}/>
-      <Total total = {parts}/>
-    </div>
-  )
+  return <Course course={course} />
 }
 
 export default App
