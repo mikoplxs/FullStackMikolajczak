@@ -8,7 +8,13 @@ const App = () => {
 
   const guh = (event) => {
     event.preventDefault()
-    setPersons(persons.concat({"name" : newName}))
+    
+    if (persons.some(n => n.name === newName)) {
+      alert(newName + " is already added")
+    }
+    else {
+      setPersons(persons.concat({"name" : newName}))
+    }
   }
 
   const handleguhchange = (event) => {
