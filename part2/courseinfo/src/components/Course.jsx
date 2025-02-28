@@ -43,9 +43,12 @@ const Course = (props) => {
     return (
       <div>
           {props.seal.map(seal => [
-            <Header course={seal.name}/>,
-            <Content course={seal.parts}/>,
-            <Total course={seal.parts}/>]
+              <li key={seal.id}>
+                <Header course={seal.name}/>
+                <Content course={seal.parts}/>
+                <Total course={seal.parts}/>
+              </li>
+            ]
           )}
       </div>
     )
