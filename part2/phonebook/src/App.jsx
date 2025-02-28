@@ -2,51 +2,21 @@ import { useState } from 'react'
 
 const Filter = (props) => {
 
-  const handlefilterchange = (event) => {
-    if (event.target.value !== "") {
-      props.showfilter(false)
-    }
-    else {
-      props.showfilter(true)
-    }
-    props.setfilter(event.target.value)
-
-  }
   return (  
   <div>
-    data filter: <input value={props.filter} onChange={handlefilterchange}/>  
+    data filter: <input value={props.filter} onChange={props.filterchange}/>  
   </div>
 )
 
 }
 
 const PersonForm = (props) => {
-  
-  const handlenamechange = (event) => {
-    props.setNewName(event.target.value)
-  }
-
-  const handlephonechange = (event) => {
-    props.setnewNumber(event.target.value)
-  }
-  
-  const addPerson = (event) => {
-    event.preventDefault()
-    
-    if (props.persons.some(n => n.name === props.newName)) {
-      alert(props.newName + " is already added")
-    }
-    else {
-      props.setPersons(props.persons.concat({name: props.newName, phone: props.newNumber}))
-    }
-  }
-
 
   return (  
-  <form onSubmit={addPerson}>
+  <form onSubmit={props.addPerson}>
     <div>
-      name: <input value={props.newname} onChange={handlenamechange}/><br></br>
-      phone number: <input value={props.newnumber} onChange={handlephonechange}/>
+      name: <input value={props.newName} onChange={props.handlenamechange}/><br></br>
+      phone number: <input value={props.newNumber} onChange={props.handlephonechange}/>
     </div>
     <div>
       <button type="submit">add</button>
@@ -57,7 +27,6 @@ const PersonForm = (props) => {
 }
 
 const PersonList = (props) => {
-
 
   return (
     <div>{props.finalpeople.map(person => (
@@ -79,22 +48,52 @@ const App = () => {
   const [newFilter, setnewFilter] = useState('')
   const [show, setShow] = useState(true)
 
+  const handlefilterchange = (event) => {
+    if (event.target.value !== "") {
+      setShow(false)
+    }
+    else {
+      setShow(true)
+    }
+    setnewFilter(event.target.value)
+
+  }
+
+  const addPerson = (event) => {
+    event.preventDefault()
+    
+    if (persons.some(n => n.name === newName)) {
+      alert(newName + " is already added")
+    }
+    else {
+      setPersons(persons.concat({name: newName, phone: newNumber}))
+    }
+  }
+
+  const handlenamechange = (event) => {
+    setNewName(event.target.value)
+  }
+
+  const handlephonechange = (event) => {
+    setnewNumber(event.target.value)
+  }
+  
 
   const thingsToShow = show ? persons : persons.filter(person => person.name.toLowerCase().match(newFilter.toLowerCase()))
 
   const PersonFormProps = {
-    persons,
-    setPersons,
+    addPerson,
     newName,
-    setNewName,
     newNumber,
-    setnewNumber
-  };
+    handlenamechange,
+    handlephonechange
+
+  }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter filter={newFilter} setfilter={setnewFilter} showfilter={setShow}/>
+      <Filter filter={newFilter} filterchange={handlefilterchange}/>
       <h2>Add</h2>
       <PersonForm {...PersonFormProps}/>
       <h2>Numbers</h2>
