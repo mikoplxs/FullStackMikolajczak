@@ -28,11 +28,25 @@ const PersonForm = (props) => {
 
 }
 
+const DeleteButton = (props) => {
+
+
+  return (
+    <view>
+      <button onClick={props.deleterecord}>delete</button>
+    </view>
+  )
+}
+
 const PersonList = (props) => {
+
+  const deleterecord = () => {
+    //props.finalpeople.filter(record => record.id != )
+  }
 
   return (
     <div>{props.finalpeople.map(person => (
-      <li key={person.name}>{person.name} {person.phone}</li>
+      <li key={person.id}>{person.name} {person.phone} <DeleteButton deleterecord={deleterecord}/></li>
     ))}
     </div>
   )
