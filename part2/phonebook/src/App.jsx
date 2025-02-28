@@ -76,6 +76,11 @@ const App = () => {
     }
     else {
       setPersons(persons.concat({name: newName, phone: newNumber}))
+      axios.post("http://localhost:3001/persons", {name: newName, phone: newNumber})
+      .then(response => {
+        console.log(response)
+      })
+
     }
   }
 
