@@ -13,5 +13,10 @@ const deleteRecord = (id_num) => {
     return axios.delete(JSON_url+"/"+id_num)
 }
 
-export default {getAll, addData, deleteRecord}    
+const updateRecord = (id_num, newObject) => {
+    return axios.put(JSON_url+"/"+id_num, newObject)
+}
+
+
+export default {getAll, addData, deleteRecord, updateRecord}    
 

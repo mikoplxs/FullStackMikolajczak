@@ -81,7 +81,18 @@ const App = () => {
     event.preventDefault()
     
     if (persons.some(n => n.name === newName)) {
-      alert(newName + " is already added")
+      if (window.confirm(newName + " is already added, replace the old number with the new one?")) {
+        const foundperson = persons.find(person => newName == person.name)
+        phoneService.updateRecord(foundperson.id, {name: foundperson.name, number: newNumber})
+        .then(response => {
+          console.log(response.data)
+          setPersons(persons.map(person => person.id === foundperson.id ? response.data : person))
+        })
+  
+      }
+      else {
+        console.log("nop")
+      }
     }
     else {
       //setPersons(persons.concat({name: newName, phone: newNumber}))
