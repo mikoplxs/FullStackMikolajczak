@@ -1,21 +1,14 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
-    },
-    {
       "name": "The Tester",
       "number": "123456789",
       "id": "2"
-
     },
     {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": "3"
-
     },
     {
       "name": "Dan Abramov",
@@ -23,19 +16,14 @@
       "id": "4"
     },
     {
-      "id": "11a2",
-      "name": "goober",
-      "phone": "12345"
+      "id": "04bc",
+      "name": "Arto Hellas",
+      "number": "040-123456"
     },
     {
-      "id": "7f61",
-      "name": "test",
-      "phone": "2"
-    },
-    {
-      "id": "b6ae",
-      "name": "bbbbbbb",
-      "phone": "545454"
+      "id": "062d",
+      "name": "testing",
+      "number": "5385893"
     }
   ]
 }

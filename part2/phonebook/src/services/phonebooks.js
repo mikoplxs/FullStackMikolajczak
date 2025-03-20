@@ -13,5 +13,5 @@ const deleteRecord = (id_num) => {
     return axios.delete(JSON_url+"/"+id_num)
 }
 
-export default {getAll, addData}    
+export default {getAll, addData, deleteRecord}    
 

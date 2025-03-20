@@ -30,23 +30,18 @@ const PersonForm = (props) => {
 
 const DeleteButton = (props) => {
 
-
   return (
     <view>
-      <button onClick={props.deleterecord}>delete</button>
+      <button onClick={() => props.deleterecord(props.recordid, props.recordname)}>delete</button>
     </view>
   )
 }
 
 const PersonList = (props) => {
 
-  const deleterecord = () => {
-    //props.finalpeople.filter(record => record.id != )
-  }
-
   return (
     <div>{props.finalpeople.map(person => (
-      <li key={person.id}>{person.name} {person.phone} <DeleteButton deleterecord={deleterecord}/></li>
+      <li key={person.id}>{person.name} {person.number} <DeleteButton deleterecord={props.deleterecord} recordid={person.id} recordname={person.name}/></li>
     ))}
     </div>
   )
@@ -90,12 +85,26 @@ const App = () => {
     }
     else {
       //setPersons(persons.concat({name: newName, phone: newNumber}))
-      phoneService.addData({name: newName, phone: newNumber})
+      phoneService.addData({name: newName, number: newNumber})
       .then(response => {
         setPersons(persons.concat(response.data))
       })
 
     }
+  }
+
+  const deleterecord = (recordid, recordname) => {
+    if (window.confirm("Delete " + recordname + " ?")) {
+      console.log("yah")
+      phoneService.deleteRecord(recordid)
+      .then(response => {
+        setPersons(persons.filter(person => person.id != recordid))
+      })
+    }
+    else {
+      console.log("nah")
+    }
+
   }
 
   const handlenamechange = (event) => {
@@ -125,7 +134,7 @@ const App = () => {
       <h2>Add</h2>
       <PersonForm {...PersonFormProps}/>
       <h2>Numbers</h2>
-      <PersonList finalpeople={thingsToShow} />
+      <PersonList finalpeople={thingsToShow} deleterecord={deleterecord}/>
     </div>
   )
 }
