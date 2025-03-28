@@ -48,6 +48,22 @@ const PersonList = (props) => {
 
 }
 
+const GoodMessage = (props) => {
+
+  if (props.message == null) {
+    return null
+  }
+
+  return (
+    <div className='goodmess'>
+      {props.message}
+    </div>
+
+  )
+
+}
+
+
 const App = () => {
 
   const [persons, setPersons] = useState([]) 
@@ -55,6 +71,7 @@ const App = () => {
   const [newNumber, setnewNumber] = useState('')
   const [newFilter, setnewFilter] = useState('')
   const [show, setShow] = useState(true)
+  const [goodmessage, setgoodmessage] = useState(null)
 
 
   useEffect(() => {
@@ -87,6 +104,10 @@ const App = () => {
         .then(response => {
           console.log(response.data)
           setPersons(persons.map(person => person.id === foundperson.id ? response.data : person))
+          setgoodmessage("Updated " + foundperson.name)
+          setTimeout(() => {
+            setgoodmessage(null)
+          }, 2000)
         })
   
       }
@@ -99,6 +120,10 @@ const App = () => {
       phoneService.addData({name: newName, number: newNumber})
       .then(response => {
         setPersons(persons.concat(response.data))
+        setgoodmessage("Added " + newName)
+        setTimeout(() => {
+          setgoodmessage(null)
+        }, 2000)
       })
 
     }
@@ -143,6 +168,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filter={newFilter} filterchange={handlefilterchange}/>
       <h2>Add</h2>
+      <GoodMessage message={goodmessage} />
       <PersonForm {...PersonFormProps}/>
       <h2>Numbers</h2>
       <PersonList finalpeople={thingsToShow} deleterecord={deleterecord}/>
