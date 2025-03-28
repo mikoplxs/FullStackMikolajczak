@@ -1,7 +1,18 @@
-.goodmess {
+.good {
     background-color: lightgray;
     border: 3px solid green;
     color: green;
+    font-size: 30px;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.bad {
+    background-color: lightgray;
+    border: 3px solid red;
+    color: red;
     font-size: 30px;
     border-radius: 5px;
     font-weight: bold;

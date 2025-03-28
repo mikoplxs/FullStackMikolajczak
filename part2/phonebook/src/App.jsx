@@ -48,14 +48,14 @@ const PersonList = (props) => {
 
 }
 
-const GoodMessage = (props) => {
+const UserMessage = (props) => {
 
   if (props.message == null) {
     return null
   }
 
   return (
-    <div className='goodmess'>
+    <div className={props.type}>
       {props.message}
     </div>
 
@@ -71,8 +71,8 @@ const App = () => {
   const [newNumber, setnewNumber] = useState('')
   const [newFilter, setnewFilter] = useState('')
   const [show, setShow] = useState(true)
-  const [goodmessage, setgoodmessage] = useState(null)
-
+  const [usermessage, setusermessage] = useState(null)
+  const [goodorbad, setgoodorbad] = useState('')
 
   useEffect(() => {
     phoneService.getAll().then(response => {
@@ -104,12 +104,19 @@ const App = () => {
         .then(response => {
           console.log(response.data)
           setPersons(persons.map(person => person.id === foundperson.id ? response.data : person))
-          setgoodmessage("Updated " + foundperson.name)
+          setusermessage("Updated " + foundperson.name)
+          setgoodorbad('good')
           setTimeout(() => {
-            setgoodmessage(null)
+            setusermessage(null)
           }, 2000)
         })
-  
+        .catch(error => {
+          setusermessage("Information of " + foundperson.name + " has already been removed")
+          setgoodorbad('bad')
+          setTimeout(() => {
+            setusermessage(null)
+          }, 2000)
+        })
       }
       else {
         console.log("nop")
@@ -120,9 +127,10 @@ const App = () => {
       phoneService.addData({name: newName, number: newNumber})
       .then(response => {
         setPersons(persons.concat(response.data))
-        setgoodmessage("Added " + newName)
+        setusermessage("Added " + newName)
+        setgoodorbad('good')
         setTimeout(() => {
-          setgoodmessage(null)
+          setusermessage(null)
         }, 2000)
       })
 
@@ -168,7 +176,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filter={newFilter} filterchange={handlefilterchange}/>
       <h2>Add</h2>
-      <GoodMessage message={goodmessage} />
+      <UserMessage message={usermessage} type={goodorbad} />
       <PersonForm {...PersonFormProps}/>
       <h2>Numbers</h2>
       <PersonList finalpeople={thingsToShow} deleterecord={deleterecord}/>
