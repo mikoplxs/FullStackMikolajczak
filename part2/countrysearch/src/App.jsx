@@ -29,6 +29,8 @@ function App() {
    countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())) :
    []
 
+  // else if tenary condition for == 1
+
   const information = newFilter!='' && countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())).length>10 ?
    "Too many matches" :
     "" 
