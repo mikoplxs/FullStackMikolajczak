@@ -13,16 +13,23 @@ const Finder = (props) => {
 
 const CountryInfo = (props) => {
 
-  console.log(props.onecountry)
-  if (props.onecountry.length == 0) {
+  
+  if (props.onecountry.length != 1) {
     return null
   }
   else {
+    const mainarray = props.onecountry[0]
+    const languages_array = Object.values(mainarray.languages)
     return (
       <div>
-        {props.onecountry.map(country => (
-          <li key={country.cca2}>{country.common}</li>
-        ))}
+        <h1>{mainarray.name.common}</h1>
+        <p>Capital {mainarray.capital[0]}<br></br>
+        Area {mainarray.area}</p>
+        <h2>Languages</h2>
+        <ul>
+          {languages_array.map(lan => (<li>{lan}</li>))}
+        </ul>
+        <img src={mainarray.flags.png}></img>
       </div>
     )  
   }
@@ -32,8 +39,6 @@ function App() {
   const [countries, setcountries] = useState([])
   const [newFilter, setnewFilter] = useState('')
   const [show, setShow] = useState(false)
-  const [sel_country, setcountry] = useState([])
-
   useEffect(() => {
     axios_vars.getAll().then(response => {
       setcountries(response.data)
@@ -47,8 +52,6 @@ function App() {
    []
 
   // else if tenary condition for == 1
-  const countrydata = countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())).length==1 ? countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())) : []
-
   const information = newFilter!='' && countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())).length>10 ?
    "Too many matches" :
     "" 
@@ -71,7 +74,7 @@ function App() {
         <li key={country.cca2}>{country.name.common}</li>
       ))}
       {information}
-      <CountryInfo onecountry={countrydata}/>
+      <CountryInfo onecountry={filteredcountries}/>
       </div>
 
     </div>
