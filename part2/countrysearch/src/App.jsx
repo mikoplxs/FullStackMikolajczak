@@ -11,16 +11,33 @@ const Finder = (props) => {
   )
 }
 
+const CountryInfo = (props) => {
+
+  console.log(props.onecountry)
+  if (props.onecountry.length == 0) {
+    return null
+  }
+  else {
+    return (
+      <div>
+        {props.onecountry.map(country => (
+          <li key={country.cca2}>{country.common}</li>
+        ))}
+      </div>
+    )  
+  }
+}
+
 function App() {
   const [countries, setcountries] = useState([])
-  const [filtered, setFiltered] = useState([])
   const [newFilter, setnewFilter] = useState('')
   const [show, setShow] = useState(false)
-  const [info, setInfo] = useState('')
+  const [sel_country, setcountry] = useState([])
 
   useEffect(() => {
     axios_vars.getAll().then(response => {
       setcountries(response.data)
+      console.log("downloaded")
     })
 
   }, [])
@@ -30,6 +47,7 @@ function App() {
    []
 
   // else if tenary condition for == 1
+  const countrydata = countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())).length==1 ? countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())) : []
 
   const information = newFilter!='' && countries.filter(country => country.name.common.toLowerCase().match(newFilter.toLowerCase())).length>10 ?
    "Too many matches" :
@@ -53,6 +71,7 @@ function App() {
         <li key={country.cca2}>{country.name.common}</li>
       ))}
       {information}
+      <CountryInfo onecountry={countrydata}/>
       </div>
 
     </div>
