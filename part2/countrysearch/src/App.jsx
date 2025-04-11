@@ -23,18 +23,35 @@ const InfoButton = (props) => {
 const CountryInfo = (props) => {
 
   const [weatherdata, setweatherdata] = useState([])
+  const [capital, setcapital] = useState("")
+
+  useEffect(() => {
+    if (capital != "") {
+      axios_vars.getWeather(capital).then(response => {
+        setweatherdata(response.data)
+        console.log("got the thing")
+      })  
+    }
+
+  }, [capital])
+
+  useEffect(() => {
+    if (props.onecountry.length == 1 || props.selected.length == 1) {
+      const mainarray = props.onecountry.length==1 ? props.onecountry[0] : props.selected[0]
+      setcapital(mainarray.capital[0])
+    }
+
+  }, [props.onecountry, props.selected])
+
 
   if (props.onecountry != [] || props.selected != []) {
     if (props.onecountry.length == 1 || props.selected.length == 1) {
-      const mainarray = props.onecountry.length==1 ? props.onecountry[0] : props.selected[0]
-      if (weatherdata != []) { // activates all the time
-        axios_vars.getWeather(mainarray.capital[0]).then(response => {
-          console.log(response.data)
-          setweatherdata(response.data)
-        })
-      }
 
+      const mainarray = props.onecountry.length==1 ? props.onecountry[0] : props.selected[0]
       const languages_array = Object.values(mainarray.languages)
+
+      const imagesrc = weatherdata?.weather ? "https://openweathermap.org/img/wn/" + weatherdata.weather[0].icon + "@2x.png" : "test"
+
       return (
         <div>
           <h1>{mainarray.name.common}</h1>
@@ -42,11 +59,14 @@ const CountryInfo = (props) => {
           Area {mainarray.area}</p>
           <h2>Languages</h2>
           <ul>
-            {languages_array.map(lan => (<li>{lan}</li>))}
+            {languages_array.map(lan => (<li key={lan}>{lan}</li>))}
           </ul>
           <img src={mainarray.flags.png}></img>
           <h2>Weather in {mainarray.capital[0]}</h2>
-          <p>Temperature {weatherdata.visibility}</p>
+          <p>Temperature {weatherdata?.main?.temp} Celsius</p>
+
+          <img src={imagesrc}/>
+          <p>Wind {weatherdata?.wind?.speed} m/s</p>
         </div>
       )    
   
@@ -58,38 +78,6 @@ const CountryInfo = (props) => {
     return null
   }
 
-/*
-  if (props.onecountry.length != 1 && props.selected.length != 1) {
-    return null
-  }
-  else if (props.onecountry.length != 1 && props.selected.length == 1){
-    mainarray = props.selected[0]
-    props.getweather(mainarray.capital[0])
-  } 
-  else {
-    mainarray = props.onecountry[0]
-    props.getweather(mainarray.capital[0])
-  }
-  if (props.onecountry.length == 1 || props.selected.length == 1) {
-    const mainarray = props.onecountry
-    const languages_array = Object.values(mainarray.languages)
-    return (
-      <div>
-        <h1>{mainarray.name.common}</h1>
-        <p>Capital {mainarray.capital[0]}<br></br>
-        Area {mainarray.area}</p>
-        <h2>Languages</h2>
-        <ul>
-          {languages_array.map(lan => (<li>{lan}</li>))}
-        </ul>
-        <img src={mainarray.flags.png}></img>
-        <h2>Weather in {mainarray.capital[0]}</h2>
-        <p>Temperature</p>
-      </div>
-    )    
-  }
-*/
-
 }
 
 function App() {
@@ -97,7 +85,6 @@ function App() {
   const [newFilter, setnewFilter] = useState('')
   const [show, setShow] = useState(false)
   const [selectedCountry, setSelected] = useState([])
-  const [capitalweather, setcapweather] = useState([])
 
   useEffect(() => {
     axios_vars.getAll().then(response => {
@@ -106,11 +93,6 @@ function App() {
     })
 
   }, [])
-
-  const getweatherinfo = (capital) => {
-  
-  
-  }
 
   const handleinfobutton = (country) => {
     console.log(country)
@@ -144,7 +126,7 @@ function App() {
         <li key={country.cca2}>{country.name.common} <InfoButton data={filteredcountries.filter(selected => selected.cca2 == country.cca2)} handleinfobutton={handleinfobutton}/></li>
       ))}
       {information}
-      <CountryInfo onecountry={filteredcountries} selected={selectedCountry} getweather={getweatherinfo} weather={capitalweather}/>
+      <CountryInfo onecountry={filteredcountries} selected={selectedCountry}/>
       </div>
 
     </div>

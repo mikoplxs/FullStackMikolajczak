@@ -12,8 +12,8 @@ const getAll = () => {
 }
 
 const getWeather = (cityName) => {
-    return axios.get(weather_url + "weather?q=" + cityName + "&appid=" + api_key)
+    return axios.get(weather_url + "weather?q=" + cityName + "&appid=" + api_key + "&units=metric")
 }
 
-export default {getCountry, getAll, getWeather}    
+export default {getCountry, getAll, getWeather}
 
