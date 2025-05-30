@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let phone_data = [
     { 
         "id": "1",
@@ -23,6 +25,11 @@ let phone_data = [
         "number": "39-23-6423122"
       }
 ]
+
+const genID = () => {
+  return Math.floor(Math.random() * (Math.floor(9999) - Math.ceil(5)) + Math.ceil(5))
+}
+
 app.get('/', (request, response) => {
     response.send("<h2>guh</h2>")
   })
@@ -46,6 +53,27 @@ app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
   phone_data = phone_data.filter(person => person.id !== id)
   response.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+  const guh = request.body
+
+  //if (!body.name || !body.number) {
+  //  return response.status(400).json({
+  //    error: 'data missing'
+  //  })
+  //}
+  
+  //const person = {
+  //  id: genID(),
+  //  name: body.name,
+  //  number: body.number
+  //}
+
+  //phone_data = phone_data.concat(person)
+  console.log(guh)
+  response.json(guh)
+
 })
 
 
