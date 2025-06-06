@@ -4,16 +4,11 @@ const app = express();
 
 app.use(express.json());
 
-morgan.token('postrequest', function getData (req) {
-  if (req.body) {
-    return req.body;
-  }
-  else {
-    return "undefined";
-  }
+morgan.token('body', function getData (req) {
+  return JSON.stringify(req.body)
 })
 
-app.use(morgan(':method :url :response-time :postrequest'));
+app.use(morgan(':method :url :response-time :body'));
 
 let phone_data = [
     { 
