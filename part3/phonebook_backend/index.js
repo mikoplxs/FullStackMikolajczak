@@ -3,7 +3,17 @@ const morgan = require('morgan');
 const app = express();
 
 app.use(express.json());
-app.use(morgan('tiny'))
+
+morgan.token('postrequest', function getData (req) {
+  if (req.body) {
+    return req.body;
+  }
+  else {
+    return "undefined";
+  }
+})
+
+app.use(morgan(':method :url :response-time :postrequest'));
 
 let phone_data = [
     { 
@@ -27,6 +37,7 @@ let phone_data = [
         "number": "39-23-6423122"
       }
 ];
+
 
 const genID = () => {
   return Math.floor(Math.random() * (Math.floor(9999) - Math.ceil(5)) + Math.ceil(5));
