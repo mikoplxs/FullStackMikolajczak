@@ -37,10 +37,6 @@ let phone_data = [
 const genID = () => {
   return Math.floor(Math.random() * (Math.floor(9999) - Math.ceil(5)) + Math.ceil(5));
 }
-
-app.get('/', (request, response) => {
-    response.send("<h2>guh</h2>");
-  })
   
 app.get('/api/persons', (request, response) => {
   response.json(phone_data);
@@ -64,7 +60,6 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-
   const body = request.body;
 
   if (!body.name || !body.number) {
@@ -72,20 +67,21 @@ app.post('/api/persons', (request, response) => {
       error: 'data missing'
     })
   }
-  else if (phone_data.includes(body.name)) {
+  if (phone_data.find(phones => phones.name === body.name)) {
     return response.status(400).json({
       error: 'name must be unique'
     })
 
   }
   const person = {
-    id: genID(),
+    id: genID().toString(),
     name: body.name,
     number: body.number,
   };
 
   phone_data = phone_data.concat(person);
   response.json(person);
+
 
 })
 
