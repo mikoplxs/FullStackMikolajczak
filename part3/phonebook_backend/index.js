@@ -73,12 +73,6 @@ app.post('/api/persons', (request, response) => {
       error: 'data missing'
     })
   }
-  
-  Phone.exists({name: body.name}, function() {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  }) 
 
   /*
   if (phone_data.find(phones => phones.name === body.name)) {
