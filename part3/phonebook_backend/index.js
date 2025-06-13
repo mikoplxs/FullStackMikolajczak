@@ -1,8 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const app = express();
 
+const Phone = require('./models/phone')
 
 app.use(cors());
 app.use(express.static('dist'));
@@ -14,6 +17,7 @@ morgan.token('body', function getData (req) {
 
 app.use(morgan(':method :url :response-time :body'));
 
+/*
 let phone_data = [
     { 
         "id": "1",
@@ -37,24 +41,22 @@ let phone_data = [
       }
 ];
 
-
+*/
 const genID = () => {
   return Math.floor(Math.random() * (Math.floor(9999) - Math.ceil(5)) + Math.ceil(5));
 }
   
 app.get('/api/persons', (request, response) => {
-  response.json(phone_data);
+  Phone.find({}).then(phones => {
+    response.json(phones)
+  })
+
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id;
-  const person = phone_data.find(person => person.id === id);
-  if (person) {
-    response.json(person);
-  }
-  else {
-    response.status(404).end();
-  }
+  Phone.findById(request.params.id).then(phone => {
+    response.json(phone)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -71,12 +73,25 @@ app.post('/api/persons', (request, response) => {
       error: 'data missing'
     })
   }
+  if (Phone.find({name: body.name})) {
+    return response.status(400).json({
+      erorr: 'name must be unique'
+    })
+  }
+
+  /*
   if (phone_data.find(phones => phones.name === body.name)) {
     return response.status(400).json({
       error: 'name must be unique'
     })
 
   }
+  */
+  const person = new Phone({
+    name: body.name,
+    number: body.number
+  })
+  /*
   const person = {
     id: genID().toString(),
     name: body.name,
@@ -84,8 +99,11 @@ app.post('/api/persons', (request, response) => {
   };
 
   phone_data = phone_data.concat(person);
-  response.json(person);
+  */
 
+  person.save().then(savedperson => {
+    response.json(savedperson)
+  })
 
 })
 
@@ -93,12 +111,15 @@ app.post('/api/persons', (request, response) => {
 app.get('/info', (request, response) => {
     const date = new Date();
 
-    response.send("<p>Phonebook has info for " + phone_data.length + " people</p>" + date.toString());
+    Phone.estimatedDocumentCount().then(count => {
+      response.send("<p>Phonebook has info for " + count + " people</p>" + date.toString());
+    })
+
 
 })
   
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 })
